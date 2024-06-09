@@ -20,7 +20,7 @@ pip install pytube
 1. Run the script by executing the following command in your terminal:
 
 ```
-python youtube_playlist_downloader.py [-p PLAYLIST_INPUT]
+python audio.py [-p PLAYLIST_INPUT]
 ```
 
 - Optional Arguments:
@@ -28,11 +28,11 @@ python youtube_playlist_downloader.py [-p PLAYLIST_INPUT]
 
 2. You can provide either the full URL of the playlist or just the playlist ID. For example:
    ```
-   python youtube_playlist_downloader.py -p https://www.youtube.com/playlist?list=example_hash_ID
+   python audio.py -p https://www.youtube.com/playlist?list=example_hash_ID
    ```
    or
    ```
-   python youtube_playlist_downloader.py -p example_hash_ID
+   python audio.py -p example_hash_ID
    ```
 
 3. If you don't provide the `-p` flag, the script will prompt you to enter the URL or ID of the YouTube playlist.
