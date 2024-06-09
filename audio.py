@@ -1,6 +1,7 @@
 import os
 from pytube import Playlist, YouTube
 import argparse
+import re
 
 class verbose:
     """ANSI color codes for terminal output."""
@@ -23,12 +24,24 @@ def print_error(message):
     """Prints an error message."""
     print(verbose.ERROR + message)
 
-def download_and_convert_to_mp3(playlist_url):
+def get_playlist_videos(playlist_id):
+    """
+    Get video URLs from a playlist ID.
+    """
+    playlist = Playlist(f'https://www.youtube.com/playlist?list={playlist_id}')
+    return playlist.video_urls
+
+def download_and_convert_to_mp3(playlist_input):
     try:
+        # Check if input is a full URL or just the playlist ID
+        if playlist_input.startswith("https://www.youtube.com/playlist?list="):
+            playlist_id = re.search(r'list=([^\s&]+)', playlist_input).group(1)
+        else:
+            playlist_id = playlist_input
+
         # Download videos from the playlist
         print_info("Fetching playlist information...")
-        playlist = Playlist(playlist_url)
-        playlist_videos = playlist.video_urls
+        playlist_videos = get_playlist_videos(playlist_id)
         print_info(f"Found {verbose.UNDERLINE}{len(playlist_videos)}{verbose.STOP} videos in the playlist.")
 
         for video_url in playlist_videos:
@@ -59,11 +72,11 @@ def download_and_convert_to_mp3(playlist_url):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Download and convert YouTube playlist videos to MP3.")
-    parser.add_argument("-p", "--playlist", type=str, help="URL of the YouTube playlist")
+    parser.add_argument("-p", "--playlist", type=str, help="URL or ID of the YouTube playlist")
     args = parser.parse_args()
 
     if args.playlist:
         download_and_convert_to_mp3(args.playlist)
     else:
-        playlist_url = input("Enter the YouTube playlist URL: ")
-        download_and_convert_to_mp3(playlist_url)
+        playlist_input = input("Enter the URL or ID of the YouTube playlist: ")
+        download_and_convert_to_mp3(playlist_input)
